@@ -1,12 +1,12 @@
 #include "main.h"
 
 /**
- * bfree - frees a pointer and NULLs the address
+ * freeb - frees a pointer and NULLs the address
  * @ptr: address of the pointer to free
  *
  * Return: 1 if freed, otherwise 0.
  */
-int bfree(void **ptr)
+int freeb(void **ptr)
 {
 	if (ptr && *ptr)
 	{

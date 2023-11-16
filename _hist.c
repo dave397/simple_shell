@@ -12,11 +12,9 @@ char *get_history_file(global_t *global)
 	char *buf, *dir;
 
 	dir = _getenv(global, "HOME=");
-	if (!dir)
-		return (NULL);
+	if (!dir) return (NULL);
 	buf = malloc(sizeof(char) * (_strlen(dir) + _strlen(HIST_FILE) + 2));
-	if (!buf)
-		return (NULL);
+	if (!buf) return (NULL);
 	buf[0] = 0;
 	_strcpy(buf, dir);
 	_strcat(buf, "/");
@@ -36,13 +34,11 @@ int write_history(global_t *global)
 	char *filename = get_history_file(global);
 	env_t *node = NULL;
 
-	if (!filename)
-		return (-1);
+	if (!filename) return (-1);
 
 	fd = open(filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
 	free(filename);
-	if (fd == -1)
-		return (-1);
+	if (fd == -1) return (-1);
 	for (node = global->history; node; node = node->next)
 	{
 		_putsfd(node->str, fd);
@@ -54,36 +50,30 @@ int write_history(global_t *global)
 }
 
 /**
- * read_history - reads history from file
+ * check_history - reads history from file
  * @global: the parameter struct
  *
  * Return: histcount on success, 0 otherwise
  */
-int read_history(global_t *global)
+int check_history(global_t *global)
 {
 	int i, last = 0, linecount = 0;
 	ssize_t fd, rdlen, fsize = 0;
 	struct stat st;
 	char *buf = NULL, *filename = get_history_file(global);
 
-	if (!filename)
-		return (0);
+	if (!filename) return (0);
 
 	fd = open(filename, O_RDONLY);
 	free(filename);
-	if (fd == -1)
-		return (0);
-	if (!fstat(fd, &st))
-		fsize = st.st_size;
-	if (fsize < 2)
-		return (0);
+	if (fd == -1) return (0);
+	if (!fstat(fd, &st)) fsize = st.st_size;
+	if (fsize < 2) return (0);
 	buf = malloc(sizeof(char) * (fsize + 1));
-	if (!buf)
-		return (0);
+	if (!buf) return (0);
 	rdlen = read(fd, buf, fsize);
 	buf[fsize] = 0;
-	if (rdlen <= 0)
-		return (free(buf), 0);
+	if (rdlen <= 0) return (free(buf), 0);
 	close(fd);
 	for (i = 0; i < fsize; i++)
 		if (buf[i] == '\n')
@@ -92,12 +82,10 @@ int read_history(global_t *global)
 			build_history_list(global, buf + last, linecount++);
 			last = i + 1;
 		}
-	if (last != i)
-		build_history_list(global, buf + last, linecount++);
+	if (last != i) build_history_list(global, buf + last, linecount++);
 	free(buf);
 	global->histcount = linecount;
-	while (global->histcount-- >= HIST_MAX)
-		delete_node_at_index(&(global->history), 0);
+	while (global->histcount-- >= HIST_MAX) delete_node_at_index(&(global->history), 0);
 	renumber_history(global);
 	return (global->histcount);
 }
@@ -114,12 +102,10 @@ int build_history_list(global_t *global, char *buf, int linecount)
 {
 	env_t *node = NULL;
 
-	if (global->history)
-		node = global->history;
+	if (global->history) node = global->history;
 	add_node_end(&node, buf, linecount);
 
-	if (!global->history)
-		global->history = node;
+	if (!global->history) global->history = node;
 	return (0);
 }
 

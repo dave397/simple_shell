@@ -1,32 +1,56 @@
 #include "main.h"
 
 /**
+ * handle_error - handles error
+ * Return: void
+ */
+
+void handle_error()
+{
+	if (errno == ENOENT)
+	{
+		perror("Error");
+		exit(127);
+	}
+	if (errno == EACCES) exit(126);
+	exit(1);
+}
+
+/**
+ * open_file - opens file
+ * @file_name: name of file
+ * Return: The file descriptor if successful, or -1 on error
+ */
+int open_file(char *file_name)
+{
+	int file_descriptor = open(file_name, O_RDONLY);
+	if (file_descriptor >= 0) return file_descriptor;
+	handle_error();
+	return -1;
+}
+
+/**
  * main - entry point
- * @ac: arg count
- * @av: arg vector
+ * @arg_count: arg count
+ * @arg_val: arg vector
  *
  * Return: 0 on success, 1 on error
  */
-int main(int ac, char **av)
+int main(int arg_count, char **arg_val)
 {
-	global_t global[] = { INIT };
-	int fd = 2;
+	global_t global[] = {INIT};
 
-	fd +=3;
+	int file_descriptor = 2;
 
-	if (ac == 2)
+	file_descriptor += 3;
+
+	if (arg_count == 2)
 	{
-		fd = open(av[1], O_RDONLY);
-		if (fd == -1)
-		{
-			perror("Error: reading command");
-			exit(127);
-			return (EXIT_FAILURE);
-		}
-		global->readfd = fd;
+		file_descriptor = open_file(arg_val[1]);
+		global->readfd = file_descriptor;
 	}
 	populate_env_list(global);
-	read_history(global);
-	simple_shell(global, av);
-	return (EXIT_SUCCESS);
+	check_history(global);
+	simple_shell(global, arg_val);
+	return (0);
 }

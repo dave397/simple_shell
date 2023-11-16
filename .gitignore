@@ -1,2 +1,5 @@
 *.exe
 .clang-format
+output
+.vscode
+hsh

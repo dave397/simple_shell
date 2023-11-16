@@ -14,30 +14,26 @@ int simple_shell(global_t *global, char **av)
 
 	while (r != -1 && builtin_ret != -2)
 	{
-		clear_info(global);
-		if (is_terminal(global))
-			_puts("$ ");
+		clear_global(global);
+		if (is_terminal(global)) _puts("$ ");
 		_eputchar(-1);
 		r = get_input(global);
 		if (r != -1)
 		{
-			set_info(global, av);
+			set_global(global, av);
 			builtin_ret = find_builtin(global);
-			if (builtin_ret == -1)
-				_find(global);
+			if (builtin_ret == -1) _find(global);
 		}
 		else if (is_terminal(global))
 			_putchar('\n');
-		free_info(global, 0);
+		free_global(global, 0);
 	}
 	write_history(global);
-	free_info(global, 1);
-	if (!is_terminal(global) && global->status)
-		exit(global->status);
+	free_global(global, 1);
+	if (!is_terminal(global) && global->status) exit(global->status);
 	if (builtin_ret == -2)
 	{
-		if (global->err_num == -1)
-			exit(global->status);
+		if (global->err_num == -1) exit(global->status);
 		exit(global->err_num);
 	}
 	return (builtin_ret);
@@ -56,14 +52,9 @@ int find_builtin(global_t *global)
 {
 	int i, built_in_ret = -1;
 	inbuilt_t builtintbl[] = {
-		{"exit", _mexit},
-		{"env", _myenv},
-		{"history", _myhistory},
-		{"setenv", _mysetenv},
-		{"unsetenv", _myunsetenv},
-		{"cd", _cd},
-		{NULL, NULL}
-	};
+	    {"exit", _mexit},	   {"env", _myenv},	      {"history", _myhistory},
+	    {"setenv", _mysetenv}, {"unsetenv", _myunsetenv}, {"cd", _cd},
+	    {NULL, NULL}};
 
 	for (i = 0; builtintbl[i].type; i++)
 		if (_strcmp(global->av[0], builtintbl[i].type) == 0)
@@ -93,10 +84,8 @@ void _find(global_t *global)
 		global->linecount_flag = 0;
 	}
 	for (i = 0, k = 0; global->arg[i]; i++)
-		if (!is_delim(global->arg[i], " \t\n"))
-			k++;
-	if (!k)
-		return;
+		if (!is_separator(global->arg[i], " \t\n")) k++;
+	if (!k) return;
 
 	path = find_path(global, _getenv(global, "PATH="), global->av[0]);
 	if (path)
@@ -106,8 +95,8 @@ void _find(global_t *global)
 	}
 	else
 	{
-		if ((is_terminal(global) || _getenv(global, "PATH=")
-			|| global->av[0][0] == '/') && _is_cmd(global, global->av[0]))
+		if ((is_terminal(global) || _getenv(global, "PATH=") || global->av[0][0] == '/') &&
+		    _is_cmd(global, global->av[0]))
 			_fork(global);
 		else if (*(global->arg) != '\n')
 		{
@@ -136,11 +125,10 @@ void _fork(global_t *global)
 	}
 	if (child_pid == 0)
 	{
-		if (execve(global->path, global->av, get_environ(global)) == -1)
+		if (execve(global->path, global->av, retrieve_environ(global)) == -1)
 		{
-			free_info(global, 1);
-			if (errno == EACCES)
-				exit(126);
+			free_global(global, 1);
+			if (errno == EACCES) exit(126);
 			exit(1);
 		}
 		/* TODO: PUT ERROR FUNCTION */
@@ -151,8 +139,7 @@ void _fork(global_t *global)
 		if (WIFEXITED(global->status))
 		{
 			global->status = WEXITSTATUS(global->status);
-			if (global->status == 126)
-				print_error(global, "Permission denied\n");
+			if (global->status == 126) print_error(global, "Permission denied\n");
 		}
 	}
 }

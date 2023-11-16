@@ -122,13 +122,13 @@ char **_strtok(char *, char *);
 char **_strtok2(char *, char);
 
 char *_memset(char *, char, unsigned int);
-void ffree(char **);
+void freef(char **);
 void *_realloc(void *, unsigned int, unsigned int);
-int is_delim(char, char *);
+int is_separator(char, char *);
 
 int _erratoi(char *);
 
-int bfree(void **);
+int freeb(void **);
 char *convert_num(long int, int, int);
 
 int is_terminal(global_t *);
@@ -149,9 +149,9 @@ ssize_t get_input(global_t *);
 int _getline(global_t *, char **, size_t *);
 void sigintHandler(int);
 
-void clear_info(global_t *);
-void set_info(global_t *, char **);
-void free_info(global_t *, int);
+void clear_global(global_t *);
+void set_global(global_t *, char **);
+void free_global(global_t *, int);
 
 char *_getenv(global_t *, const char *);
 int _myenv(global_t *);
@@ -159,37 +159,37 @@ int _mysetenv(global_t *);
 int _myunsetenv(global_t *);
 int populate_env_list(global_t *);
 
-/* toem_getenv.c */
-char **get_environ(global_t *);
+/* _getenv.c */
+char **retrieve_environ(global_t *);
 int _unsetenv(global_t *, char *);
 int _setenv(global_t *, char *, char *);
 
-/* toem_history.c */
+/* _history.c */
 char *get_history_file(global_t *global);
 int write_history(global_t *global);
-int read_history(global_t *global);
+int check_history(global_t *global);
 int build_history_list(global_t *global, char *buf, int linecount);
 int renumber_history(global_t *global);
 
-/* toem_lists.c */
+/* _lists.c */
 env_t *add_node(env_t **, const char *, int);
 env_t *add_node_end(env_t **, const char *, int);
 size_t print_list_str(const env_t *);
 int delete_node_at_index(env_t **, unsigned int);
 void free_list(env_t **);
 
-/* toem_lists1.c */
+/* _lists1.c */
 size_t list_len(const env_t *);
 char **env_to_strings(env_t *);
 size_t print_list(const env_t *);
 env_t *node_starts_with(env_t *, char *, char);
 ssize_t get_node_index(env_t *, env_t *);
 
-/* toem_vars.c */
+/* _vars.c */
 int is_chain(global_t *, char *, size_t *);
 void check_chain(global_t *, char *, size_t *, size_t, size_t);
-int replace_alias(global_t *);
-int replace_vars(global_t *);
+int swap_alias(global_t *);
+int swap_vars(global_t *);
 int replace_string(char **, char *);
 
 #endif

@@ -14,29 +14,6 @@ int _myhistory(global_t *global)
 }
 
 /**
- * unset_alias - sets alias to string
- * @global: parameter struct
- * @str: the string alias
- *
- * Return: Always 0 on success, 1 on error
- */
-int unset_alias(global_t *global, char *str)
-{
-	char *p, c;
-	int ret;
-
-	p = _strchr(str, '=');
-	if (!p)
-		return (1);
-	c = *p;
-	*p = 0;
-	ret = delete_node_at_index(&(global->alias),
-		get_node_index(global->alias, node_starts_with(global->alias, str, -1)));
-	*p = c;
-	return (ret);
-}
-
-/**
  * set_alias - sets alias to string
  * @global: parameter struct
  * @str: the string alias
@@ -48,10 +25,8 @@ int set_alias(global_t *global, char *str)
 	char *p;
 
 	p = _strchr(str, '=');
-	if (!p)
-		return (1);
-	if (!*++p)
-		return (unset_alias(global, str));
+	if (!p) return (1);
+	if (!*++p) return (unset_alias(global, str));
 
 	unset_alias(global, str);
 	return (add_node_end(&(global->alias), str, 0) == NULL);
@@ -70,8 +45,7 @@ int print_alias(env_t *node)
 	if (node)
 	{
 		p = _strchr(node->str, '=');
-		for (a = node->str; a <= p; a++)
-			_putchar(*a);
+		for (a = node->str; a <= p; a++) _putchar(*a);
 		_putchar('\'');
 		_puts(p + 1);
 		_puts("'\n");
@@ -112,4 +86,27 @@ int _myalias(global_t *global)
 	}
 
 	return (0);
+}
+
+/**
+ * unset_alias - sets alias to string
+ * @global: parameter struct
+ * @str: the string alias
+ *
+ * Return: Always 0 on success, 1 on error
+ */
+int unset_alias(global_t *global, char *str)
+{
+	char *p, c;
+	int ret;
+
+	p = _strchr(str, '=');
+	if (!p) return (1);
+	c = *p;
+	*p = 0;
+	ret = delete_node_at_index(
+	    &(global->alias),
+	    get_node_index(global->alias, node_starts_with(global->alias, str, -1)));
+	*p = c;
+	return (ret);
 }

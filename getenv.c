@@ -1,12 +1,12 @@
 #include "main.h"
 
 /**
- * get_environ - returns the string array copy of our environ
+ * retrieve_environ - returns the string array copy of our environ
  * @global: Structure containing potential arguments. Used to maintain
  *          constant function prototype.
  * Return: Always 0
  */
-char **get_environ(global_t *global)
+char **retrieve_environ(global_t *global)
 {
 	if (!global->environ || global->env_changed)
 	{
@@ -30,8 +30,7 @@ int _unsetenv(global_t *global, char *var)
 	size_t i = 0;
 	char *p;
 
-	if (!node || !var)
-		return (0);
+	if (!node || !var) return (0);
 
 	while (node)
 	{
@@ -64,12 +63,10 @@ int _setenv(global_t *global, char *var, char *value)
 	env_t *node;
 	char *p;
 
-	if (!var || !value)
-		return (0);
+	if (!var || !value) return (0);
 
 	buf = malloc(_strlen(var) + _strlen(value) + 2);
-	if (!buf)
-		return (1);
+	if (!buf) return (1);
 	_strcpy(buf, var);
 	_strcat(buf, "=");
 	_strcat(buf, value);

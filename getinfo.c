@@ -1,10 +1,10 @@
 #include "main.h"
 
 /**
- * clear_info - initializes global_t struct
+ * clear_global - initializes global_t struct
  * @global: struct address
  */
-void clear_info(global_t *global)
+void clear_global(global_t *global)
 {
 	global->arg = NULL;
 	global->av = NULL;
@@ -13,11 +13,11 @@ void clear_info(global_t *global)
 }
 
 /**
- * set_info - initializes global_t struct
+ * set_global - initializes global_t struct
  * @global: struct address
  * @av: argument vector
  */
-void set_info(global_t *global, char **av)
+void set_global(global_t *global, char **av)
 {
 	int i = 0;
 
@@ -27,7 +27,6 @@ void set_info(global_t *global, char **av)
 		global->av = _strtok(global->arg, " \t");
 		if (!global->av)
 		{
-
 			global->av = malloc(sizeof(char *) * 2);
 			if (global->av)
 			{
@@ -39,36 +38,31 @@ void set_info(global_t *global, char **av)
 			;
 		global->argc = i;
 
-		replace_alias(global);
-		replace_vars(global);
+		swap_alias(global);
+		swap_vars(global);
 	}
 }
 
 /**
- * free_info - frees global_t struct fields
+ * free_global - frees global_t struct fields
  * @global: struct address
  * @all: true if freeing all fields
  */
-void free_info(global_t *global, int all)
+void free_global(global_t *global, int all)
 {
-	ffree(global->av);
+	freef(global->av);
 	global->av = NULL;
 	global->path = NULL;
 	if (all)
 	{
-		if (!global->cmd_buf)
-			free(global->arg);
-		if (global->env)
-			free_list(&(global->env));
-		if (global->history)
-			free_list(&(global->history));
-		if (global->alias)
-			free_list(&(global->alias));
-		ffree(global->environ);
-			global->environ = NULL;
-		bfree((void **)global->cmd_buf);
-		if (global->readfd > 2)
-			close(global->readfd);
+		if (!global->cmd_buf) free(global->arg);
+		if (global->env) free_list(&(global->env));
+		if (global->history) free_list(&(global->history));
+		if (global->alias) free_list(&(global->alias));
+		freef(global->environ);
+		global->environ = NULL;
+		freeb((void **) global->cmd_buf);
+		if (global->readfd > 2) close(global->readfd);
 		_putchar(-1);
 	}
 }

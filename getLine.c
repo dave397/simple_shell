@@ -15,7 +15,7 @@ ssize_t input_buf(global_t *global, char **buf, size_t *len)
 
 	if (!*len) /* if nothing left in the buffer, fill it */
 	{
-		/*bfree((void **)global->cmd_buf);*/
+		/*freeb((void **)global->cmd_buf);*/
 		free(*buf);
 		*buf = NULL;
 		signal(SIGINT, sigintHandler);
@@ -61,32 +61,31 @@ ssize_t get_input(global_t *global)
 	r = input_buf(global, &buf, &len);
 	if (r == -1) /* EOF */
 		return (-1);
-	if (len)	/* we have commands left in the chain buffer */
+	if (len) /* we have commands left in the chain buffer */
 	{
-		j = i; /* init new iterator to current buf position */
+		j = i;	     /* init new iterator to current buf position */
 		p = buf + i; /* get pointer for return */
 
 		check_chain(global, buf, &j, i, len);
 		while (j < len) /* iterate to semicolon or end */
 		{
-			if (is_chain(global, buf, &j))
-				break;
+			if (is_chain(global, buf, &j)) break;
 			j++;
 		}
 
-		i = j + 1; /* increment past nulled ';'' */
+		i = j + 1;    /* increment past nulled ';'' */
 		if (i >= len) /* reached end of buffer? */
 		{
 			i = len = 0; /* reset position and length */
 			global->cmd_buf_type = 0;
 		}
 
-		*buf_p = p; /* pass back pointer to current command position */
+		*buf_p = p;	     /* pass back pointer to current command position */
 		return (_strlen(p)); /* return length of current command */
 	}
 
 	*buf_p = buf; /* else not a chain, pass back buffer from _getline() */
-	return (r); /* return length of buffer from _getline() */
+	return (r);   /* return length of buffer from _getline() */
 }
 
 /**
@@ -101,11 +100,9 @@ ssize_t read_buf(global_t *global, char *buf, size_t *i)
 {
 	ssize_t r = 0;
 
-	if (*i)
-		return (0);
+	if (*i) return (0);
 	r = read(global->readfd, buf, 1024);
-	if (r >= 0)
-		*i = r;
+	if (r >= 0) *i = r;
 	return (r);
 }
 
@@ -126,17 +123,14 @@ int _getline(global_t *global, char **ptr, size_t *length)
 	char *p = NULL, *new_p = NULL, *c;
 
 	p = *ptr;
-	if (p && length)
-		s = *length;
-	if (i == len)
-		i = len = 0;
+	if (p && length) s = *length;
+	if (i == len) i = len = 0;
 
 	r = read_buf(global, buf, &len);
-	if (r == -1 || (r == 0 && len == 0))
-		return (-1);
+	if (r == -1 || (r == 0 && len == 0)) return (-1);
 
 	c = _strchr(buf + i, '\n');
-	k = c ? 1 + (unsigned int)(c - buf) : len;
+	k = c ? 1 + (unsigned int) (c - buf) : len;
 	new_p = _realloc(p, s, s ? s + k : k + 1);
 	if (!new_p) /* MALLOC FAILURE! */
 		return (p ? free(p), -1 : -1);
@@ -150,8 +144,7 @@ int _getline(global_t *global, char **ptr, size_t *length)
 	i = k;
 	p = new_p;
 
-	if (length)
-		*length = s;
+	if (length) *length = s;
 	*ptr = p;
 	return (s);
 }
@@ -162,7 +155,7 @@ int _getline(global_t *global, char **ptr, size_t *length)
  *
  * Return: void
  */
-void sigintHandler(__attribute__((unused))int sig_num)
+void sigintHandler(__attribute__((unused)) int sig_num)
 {
 	_puts("\n");
 	_puts("$ ");
