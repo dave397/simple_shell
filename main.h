@@ -192,4 +192,6 @@ int swap_alias(global_t *);
 int swap_vars(global_t *);
 int replace_string(char **, char *);
 
+int unset_alias(global_t *global, char *str);
+
 #endif
