@@ -54,7 +54,6 @@ char **env_to_strings(env_t *head)
 	return (strs);
 }
 
-
 /**
  * print_list - prints all elements of a env_t linked list
  * @h: pointer to first node

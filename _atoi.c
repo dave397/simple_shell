@@ -38,7 +38,8 @@ int _atoi(char *s)
 
 	for (i = 0; s[i] != '\0' && flag != 2; i++)
 	{
-		if (s[i] == '-') sign *= -1;
+		if (s[i] == '-')
+			sign *= -1;
 
 		if (s[i] >= '0' && s[i] <= '9')
 		{
@@ -67,6 +68,7 @@ int _atoi(char *s)
 int is_separator(char c, char *delim)
 {
 	while (*delim)
-		if (*delim++ == c) return (1);
+		if (*delim++ == c)
+			return (1);
 	return (0);
 }

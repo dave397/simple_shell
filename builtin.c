@@ -41,7 +41,8 @@ int _mycd(global_t *global)
 	int chdir_ret;
 
 	s = getcwd(buffer, 1024);
-	if (!s) _puts("TODO: >>getcwd failure emsg here<<\n");
+	if (!s)
+		_puts("TODO: >>getcwd failure emsg here<<\n");
 	if (!global->av[1])
 	{
 		dir = _getenv(global, "HOME=");
@@ -90,6 +91,7 @@ int _myhelp(global_t *global)
 
 	arg_array = global->av;
 	_puts("help call works. Function not yet implemented \n");
-	if (0) _puts(*arg_array); /* temp att_unused workaround */
+	if (0)
+		_puts(*arg_array); /* temp att_unused workaround */
 	return (0);
 }

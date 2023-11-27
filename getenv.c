@@ -30,14 +30,16 @@ int _unsetenv(global_t *global, char *var)
 	size_t i = 0;
 	char *p;
 
-	if (!node || !var) return (0);
+	if (!node || !var)
+		return (0);
 
 	while (node)
 	{
 		p = starts_with(node->str, var);
 		if (p && *p == '=')
 		{
-			global->env_changed = delete_node_at_index(&(global->env), i);
+			global->env_changed =
+			    delete_node_at_index(&(global->env), i);
 			i = 0;
 			node = global->env;
 			continue;
@@ -63,10 +65,12 @@ int _setenv(global_t *global, char *var, char *value)
 	env_t *node;
 	char *p;
 
-	if (!var || !value) return (0);
+	if (!var || !value)
+		return (0);
 
 	buf = malloc(_strlen(var) + _strlen(value) + 2);
-	if (!buf) return (1);
+	if (!buf)
+		return (1);
 	_strcpy(buf, var);
 	_strcat(buf, "=");
 	_strcat(buf, value);

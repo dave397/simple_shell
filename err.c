@@ -17,7 +17,8 @@ int _eputchar(char c)
 		write(2, buf, i);
 		i = 0;
 	}
-	if (c != -1) buf[i++] = c;
+	if (c != -1)
+		buf[i++] = c;
 	return (1);
 }
 
@@ -39,7 +40,8 @@ int _putfd(char c, int fd)
 		write(fd, buf, i);
 		i = 0;
 	}
-	if (c != -1) buf[i++] = c;
+	if (c != -1)
+		buf[i++] = c;
 	return (1);
 }
 
@@ -53,7 +55,8 @@ void _eputs(char *str)
 {
 	int i = 0;
 
-	if (!str) return;
+	if (!str)
+		return;
 	while (str[i] != '\0')
 	{
 		_eputchar(str[i]);
@@ -72,7 +75,8 @@ int _putsfd(char *str, int fd)
 {
 	int i = 0;
 
-	if (!str) return (0);
+	if (!str)
+		return (0);
 	while (*str)
 	{
 		i += _putfd(*str++, fd);

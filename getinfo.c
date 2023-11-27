@@ -55,14 +55,19 @@ void free_global(global_t *global, int all)
 	global->path = NULL;
 	if (all)
 	{
-		if (!global->cmd_buf) free(global->arg);
-		if (global->env) free_list(&(global->env));
-		if (global->history) free_list(&(global->history));
-		if (global->alias) free_list(&(global->alias));
+		if (!global->cmd_buf)
+			free(global->arg);
+		if (global->env)
+			free_list(&(global->env));
+		if (global->history)
+			free_list(&(global->history));
+		if (global->alias)
+			free_list(&(global->alias));
 		freef(global->environ);
 		global->environ = NULL;
-		freeb((void **) global->cmd_buf);
-		if (global->readfd > 2) close(global->readfd);
+		freeb((void **)global->cmd_buf);
+		if (global->readfd > 2)
+			close(global->readfd);
 		_putchar(-1);
 	}
 }

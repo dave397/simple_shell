@@ -12,7 +12,8 @@ void handle_error()
 		perror("Error");
 		exit(127);
 	}
-	if (errno == EACCES) exit(126);
+	if (errno == EACCES)
+		exit(126);
 	exit(1);
 }
 
@@ -24,7 +25,8 @@ void handle_error()
 int open_file(char *file_name)
 {
 	int file_descriptor = open(file_name, O_RDONLY);
-	if (file_descriptor >= 0) return file_descriptor;
+	if (file_descriptor >= 0)
+		return file_descriptor;
 	handle_error();
 	return -1;
 }

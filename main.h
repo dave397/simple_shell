@@ -1,22 +1,21 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <fcntl.h>
-#include <errno.h>
+#include <unistd.h>
 
-#define HIST_FILE	".simple_shell_history"
-#define HIST_MAX	4096
+#define HIST_FILE ".simple_shell_history"
+#define HIST_MAX 4096
 
 extern char **environ;
-
 
 /**
  * struct strlist - singly linked list
@@ -76,9 +75,11 @@ typedef struct passinfo
 	int histcount;
 } global_t;
 
-#define INIT \
-{0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, 0, 0, NULL, \
-	0, 0, 0}
+#define INIT                                                                   \
+	{                                                                      \
+		0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, 0, \
+		    0, NULL, 0, 0, 0                                           \
+	}
 
 /**
  *struct builtin - contains a builtin string and related function
@@ -95,7 +96,6 @@ void _find(global_t *);
 int find_builtin(global_t *);
 int simple_shell(global_t *, char **);
 void _fork(global_t *);
-
 
 char *dup_chars(char *, int, int);
 int _is_cmd(global_t *, char *);
